@@ -90,8 +90,8 @@ public class GamePlay {
 	 * @return
 	 */
 	public HandPoker getBestMadeHand(Player player) {
-		//FIXME: this should not return null, it should return back the best made hand in the hashmap
-		return null;
+		return BestMadeHand.get(player.getPlayerID());
+	
 	}
 
 	/**
@@ -105,8 +105,8 @@ public class GamePlay {
 	 * @return
 	 */
 	public ArrayList<HandPoker> getBestPossibleHands(Player player) {
-		//FIXME: this should not return null, it should return an array of the best possible hands
-		return null;
+		return BestPossibleHands.get(player.getPlayerID());
+
 	}
 
 	/**
@@ -159,8 +159,7 @@ public class GamePlay {
 	 * @return
 	 */
 	public HandPoker GetPlayersHand(Player player) {
-		//FIXME: this should return back the Player's hand from the hashmap
-		return null;
+		return GameHand.get(player.getPlayerID());
 	}
 
 	/**
@@ -186,7 +185,13 @@ public class GamePlay {
 	 * @return
 	 */
 	public boolean isMadeHandBestPossibleHand(Player player) {
-		//FIXME: If the BestMadeHand is in the BestPossibleHands, return true.  The player has the NUTS!
+
+		ArrayList<HandPoker> bphArray = BestPossibleHands.get(player.getPlayerID());
+		for (int i = 0; i < bphArray.size(); i++) {
+			if (BestMadeHand.get(player.getPlayerID()) == bphArray.get(i)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -200,7 +205,7 @@ public class GamePlay {
 	 * @param HandPoker
 	 */
 	protected void SetBestMadeHand(UUID PlayerID, HandPoker HandPoker) {
-		//FIXME: Put the best made hand for a plyer in the map.
+		BestMadeHand.put(PlayerID, HandPoker);
 	}
 
 	/**
@@ -213,7 +218,7 @@ public class GamePlay {
 	 * @param BestHands
 	 */
 	protected void SetBestPossibleHands(UUID PlayerID, ArrayList<HandPoker> BestHands) {
-		//FIXME: Set the best possible hands in the map
+		BestPossibleHands.put(PlayerID, BestHands);
 	}
 	
 	/**
@@ -248,10 +253,23 @@ public class GamePlay {
 	 */
 	public ArrayList<Player> GetGameWinners() {
 		
-		//FIXME: Find all the bestmadehand from each of the players, return an ArrayList of Players that have the best hand.  Two players could tie (so two entries in the ArrayList		
+		
 		ArrayList<Player> WinningPlayers = new ArrayList<Player>();
 		ArrayList<HandPoker> GameHands = new ArrayList<HandPoker>();
-		//FIXME: finish the implmentation
+		
+		for (HandPoker hand : BestMadeHand.values() ) {
+			GameHands.add(hand);
+		}
+		
+		Collections.sort(GameHands);
+		
+		for (UUID currentID : BestMadeHand.keySet() ) {
+			if (BestMadeHand.get(currentID)==BestMadeHand.get(0)) {
+				WinningPlayers.add(GetGamePlayer(currentID));
+			}
+		}
+
+		
 		return WinningPlayers;
 	}
 
