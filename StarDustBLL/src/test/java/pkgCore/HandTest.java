@@ -1049,4 +1049,7 @@ public class HandTest {
 		//	Get Kicker 4 Rank
 		assertEquals(eRank.TWO, HSP.getKickers().get(3).geteRank());			
 	}
-}
+
+
+
+	
